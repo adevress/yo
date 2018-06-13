@@ -52,5 +52,6 @@ Embedded component : [hadoken](https://github.com/adevress/hadoken), [digestpp](
 
 ## LICENSE
 
-GPLv3
+Command line tools: GPLv3
+Shared Library, Static library and python modules: MPL2
 
