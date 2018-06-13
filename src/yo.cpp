@@ -2,20 +2,10 @@
     yo, parallel I/O utilities
     Copyright (C) 2018 Adrien Devresse
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*
-*/
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+**/
 
 
 #include <iostream>
@@ -154,9 +144,29 @@ void copy_chunk(const options & opts, int fd_dst, int fd_src, off_t offset, std:
 
 }
 
+
+std::string extract_filename(const std::string & src){
+    auto pos = src.rfind('/');
+    if(pos != std::string::npos && pos < src.size()){
+        return src.substr(pos);
+    }
+    return src;
+}
+
+int open_file_or_in_subdir(const std::string & dst, const std::string & filename, int mode){
+    try{
+        return open_file(dst, mode);
+    } catch(std::system_error & e){
+        if(e.code() != std::error_code( EISDIR, std::generic_category() ) ){
+            throw e;
+        }
+    }
+    return open_file(fmt::scat(dst + '/' + filename), mode);
+}
+
 void context::copy_file(const options & opts, const std::string & src, const std::string & dst){
     int fd_src = open_file(src, O_RDONLY);
-    int fd_dst = open_file(dst, O_WRONLY | O_CREAT);
+    int fd_dst = open_file_or_in_subdir(dst, extract_filename(src), O_WRONLY | O_CREAT);
 
     struct stat st = stat_file(fd_src);
     const std::size_t size_file = st.st_size;

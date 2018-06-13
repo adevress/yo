@@ -4,3 +4,6 @@
 [submodule "deps/hadoken"]
 	path = deps/hadoken
 	url = https://github.com/adevress/hadoken
+[submodule "deps/pybind11"]
+	path = deps/pybind11
+	url = https://github.com/pybind/pybind11
