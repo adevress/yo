@@ -1,0 +1,14 @@
+# Package Information for pkg-config
+
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+
+
+Name: YO
+Description: YO Parallel I/O toolkit
+Version: @YO_VERSION_MAJOR@.@YO_VERSION_MINOR@
+Libs: -L${libdir} -lyo
+Cflags: -I${includedir}
