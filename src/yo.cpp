@@ -185,11 +185,17 @@ void context::copy_file(const options & opts, const std::string & src, const std
     const std::size_t worker_block = size_file / n_workers;
 
     for(std::size_t i =0; i < n_workers; ++i){
-        off_t worker_offset = i * worker_block;
-        std::size_t read_size = std::min<std::size_t>( (i + 1) * worker_block, size_file) - size_t(worker_offset);
+        std::size_t worker_offset = i * worker_block;
+        std::size_t read_size;
+
+        if( (i +1) == n_workers){ // last worker
+            read_size = size_file - worker_offset;
+        }else{
+            read_size = ( (i + 1) * worker_block) - worker_offset;
+        }
 
         futures.emplace_back(  _pimpl->executor.twoway_execute( [&opts, fd_dst, fd_src, worker_offset, read_size]{
-            copy_chunk(opts, fd_dst, fd_src, worker_offset, read_size);
+            copy_chunk(opts, fd_dst, fd_src, off_t(worker_offset), read_size);
 
         }));
     }

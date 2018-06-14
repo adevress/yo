@@ -87,7 +87,9 @@ install(TARGETS yocp DESTINATION ${BIN_INSTALL_DIR}/)
 set(pyyo_src "${CMAKE_CURRENT_SOURCE_DIR}/src/pyyo.cpp")
 add_library(pyyo MODULE ${pyyo_src} ${YO_HEADERS_1} ${YO_HEADERS_2})
 target_link_libraries(pyyo ${CMAKE_THREAD_LIBS_INIT} libyo)
-set_target_properties(pyyo PROPERTIES OUTPUT_NAME "_yo")
+set_target_properties(pyyo PROPERTIES
+    OUTPUT_NAME "_yo"
+    PREFIX "")
 target_include_directories(pyyo PRIVATE ${PYTHON_INCLUDE_DIRS})
 
 FILE(GLOB PY_FILES "python/*.py")
