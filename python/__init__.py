@@ -10,3 +10,15 @@
 
 
 from . _yo import (copyfile)
+
+'''
+    import copyfile
+'''
+
+
+'''
+    define copy as copyfile
+'''
+copy = copyfile
+
+
