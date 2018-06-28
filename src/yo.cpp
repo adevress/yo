@@ -30,13 +30,9 @@
 
 
 
-#include <digestpp.hpp>
-
 #include <yo/yo.hpp>
 
 namespace fmt = hadoken::format;
-
-using namespace digestpp;
 
 
 constexpr std::size_t block_size = 1 << 24;  // 16Mi
@@ -209,5 +205,3 @@ void context::copy_file(const options & opts, const std::string & src, const std
 }
 
 } // yo
-
-
