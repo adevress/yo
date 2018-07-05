@@ -19,7 +19,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake
       ${PROJECT_SOURCE_DIR}/CMake/config)
 
 include(CTest)
-include(DefineInstallationPaths)
+include(GNUInstallDirs)
 include(ReleaseDebugAutoFlags)
 include(CompilerFlagsHelpers)
 include(DetectCXX11Support)
@@ -67,7 +67,7 @@ target_compile_options(libyo PUBLIC ${CMAKE_CXX_POSITION_INDEPENDANT})
 set_target_properties(libyo PROPERTIES OUTPUT_NAME "yo")
 
 
-install(TARGETS libyo DESTINATION ${LIB_INSTALL_DIR}/)
+install(TARGETS libyo DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/)
 
 #
 # yocp tool
@@ -78,7 +78,7 @@ add_executable(yocp ${yocp_src} ${YO_HEADERS_1} ${YO_HEADERS_2})
 target_link_libraries(yocp ${CMAKE_THREAD_LIBS_INIT} libyo)
 
 
-install(TARGETS yocp DESTINATION ${BIN_INSTALL_DIR}/)
+install(TARGETS yocp DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}/)
 
 
 #
@@ -95,13 +95,13 @@ target_include_directories(pyyo PRIVATE ${PYTHON_INCLUDE_DIRS})
 FILE(GLOB PY_FILES "${CMAKE_CURRENT_SOURCE_DIR}/python/*.py")
 
 
-install(TARGETS pyyo DESTINATION ${LIB_INSTALL_DIR}/${CMAKE_INSTALL_PYTHON_SITE_PACKAGE}/yo)
-install(FILES ${PY_FILES} DESTINATION ${LIB_INSTALL_DIR}/${CMAKE_INSTALL_PYTHON_SITE_PACKAGE}/yo)
+install(TARGETS pyyo DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/${CMAKE_INSTALL_PYTHON_SITE_PACKAGE}/yo)
+install(FILES ${PY_FILES} DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/${CMAKE_INSTALL_PYTHON_SITE_PACKAGE}/yo)
 
 ## install headers
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/yo DESTINATION ${INCLUDE_INSTALL_DIR})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/yo DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR})
 
 
 ## pkgconfig
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/yo.pc.in ${CMAKE_CURRENT_BINARY_DIR}/yo.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/yo.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig/)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/yo.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig/)
