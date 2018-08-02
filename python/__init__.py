@@ -22,3 +22,5 @@ from . _yo import (copyfile)
 copy = copyfile
 
 
+__version__ = "0.3"
+

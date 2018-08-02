@@ -7,7 +7,7 @@ option(YO_PYTHON_BINDINGS "Enable compilation of python bindings" ON)
 set(PYTHON_VERSION "" CACHE STRING "Python version to use")
 
 set(YO_VERSION_MAJOR "0")
-set(YO_VERSION_MINOR "2")
+set(YO_VERSION_MINOR "3")
 
 
 add_definitions( -DYO_VERSION_MAJOR=\"${YO_VERSION_MAJOR}\" -DYO_VERSION_MINOR=\"${YO_VERSION_MINOR}\")
