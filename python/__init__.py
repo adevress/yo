@@ -10,6 +10,7 @@
 
 
 from . _yo import (copyfile)
+import .numpyio
 
 '''
     import copyfile
