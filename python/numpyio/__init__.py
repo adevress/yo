@@ -16,7 +16,7 @@ def save(filename, arr, *args, **kwargs):
     if not filename.endswith(".npy"):
         filename += ".npy"
     with open(filename, 'wb') as f:
-        numpy.save(f, arr)
+        numpy.save(f, arr, *args, **kwargs)
         # a trick here
         # we enforce flush explicitely here
         # Many PFS have a relaxed POSIX model
