@@ -1,53 +1,72 @@
-# HTREE
+# YO
 
 ## SUMMARY
 
-htree is a message digest tool (like md5sum, sha256sum) but fully multi-threaded.
+YO is a minimalist tool to maximize I/O throughput on top of Parallel File System (e.g GPFS, Lustre, BeeGFS, etc.... )
 
-This make significantly faster the creation of checksum for large files.
+YO parallelise I/O for large sequential read/write pattern of few operations : file copy, sequential big I/O, numpy I/O )
+
+YO is delivered with yocp: a parallel version of the cp tool
+
 
 ## USAGE
 
-	htree [file1] [file...] [filen]
+	yocp [src_file] [dst_file] 
 
 
 ## EXAMPLE
 
+### YOCP example 
 ```bash
-ls -lh bigtarball.tar.gz 
--rw-rw-r-- 1 X X 2,4G mars  27 21:38 bigtarball.tar.gz
+
+ls -lh $SHARED_HOME/test.big
+-rwxr-xr-x 1 X X 3,0G  2 août  09:27 test.big
 
 
-time htree bigtarball.tar.gz 
-22dbbb9fc312070f987789d7fc3ed605529434d2da5823e3c058ce8c749cbd85 bigtarball.tar.gz
 
-real	0m1,717s
-user	0m11,328s
-sys	0m0,696s
+time cp $SHARED_HOME/test.big $SCRATCH/test.big2
 
-time md5sum bigtarball.tar.gz 
-34cbee16ad07f1aa6e912d4c7c42d98a  bigtarball.tar.gz
+real	0m33.622s
+user	0m0.017s
+sys	0m5.152s
 
-real	0m3,940s
-user	0m3,749s
-sys	0m0,192s
+time yocp $SHARED_HOME/test.big $SCRATCH/test.big3
+
+real	0m22.094s
+user	0m0.033s
+sys	0m4.902s
+
+
+```
+
+### numpyio example 
+
+
+```python
+
+import yo.numpyio as npio
+import numpy as np
+
+z = np.zeros([3,3])
+
+npio.save("/tmp/zero.npy", z)
+
+## saved properly
+
+r = npio.load("/tmp/zero.npy")
 
 ```
 
 ## ALGORITHM
 
-Most hashing function beings purely sequential, htree uses by default a decomposition in 16MiB block size and a [Merkle tree](https://en.wikipedia.org/wiki/Merkle_tree) to acheive parallelism.
-
-The default hash function used by htree is the SHA-3 candidate [blake2b](https://en.wikipedia.org/wiki/BLAKE_(hash_function)).
-
-The implementation of htree is simple and fits in a single < 300 lines file.
-
+YO uses simple multi-threaded parallel I/O using a multiple of the DFS block size
 
 ## DEPENDENCIES
 
-None. C++11 compatible compiler
+- C++11 compatible compiler
+- Boost > 1.41
 
-Embedded component : [hadoken](https://github.com/adevress/hadoken), [digestpp](https://github.com/kerukuro/digestpp)
+Embedded component : [hadoken](https://github.com/adevress/hadoken)
 
 
 ## LICENSE
