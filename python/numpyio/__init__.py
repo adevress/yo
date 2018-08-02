@@ -11,12 +11,17 @@
 import numpy
 
 
-def save(filename, *args, **kwargs):
+def save(filename, arr, *args, **kwargs):
     filename = str(filename)
     if not filename.endswith(".npy"):
         filename += ".npy"
     with open(filename, 'wb') as f:
-        numpy.save(f, filename)
+        numpy.save(f, arr)
+        # a trick here
+        # we enforce flush explicitely here
+        # Many PFS have a relaxed POSIX model
+        # and do not insure content consistency between clients excepted
+        # in case of explicit flush
         f.flush()
 
 
