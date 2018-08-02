@@ -27,6 +27,7 @@ include(FindPkgConfig)
 
 
 find_package(Threads)
+find_package(Boost 1.41 COMPONENTS system)
 
 
 
@@ -53,7 +54,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/deps/digestpp/  )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/deps/pybind11/include  )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/deps/hadoken/include  )
 
-include_directories(SYSTEM ${BOOST_INCLUDE_DIR} )
+include_directories(SYSTEM ${Boost_INCLUDE_DIR} )
 
 #
 # libyo library
