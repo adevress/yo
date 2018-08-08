@@ -32,6 +32,8 @@
 
 using namespace yo;
 
+namespace py = pybind11;
+
 void py_copyfile(const std::string & src, const std::string & dst){
     context c;
     options opts;
@@ -44,4 +46,10 @@ PYBIND11_MODULE(_yo, m) {
     m.doc() = "YO toolkit and utilities for parallel io";
 
     m.def("copyfile", &py_copyfile, "copy a file using parallel I/O");
+
+    py::class_<options>(m, "options")
+        .def(py::init<>())
+        .def("get_block_size", &options::get_block_size)
+        .def("get_concurrency", &options::get_concurrency);
+
 }

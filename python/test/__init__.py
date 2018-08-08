@@ -8,19 +8,3 @@
 ##  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ##
 
-
-from . _yo import (copyfile, options)
-
-'''
-    import copyfile
-'''
-
-
-'''
-    define copy as copyfile
-'''
-copy = copyfile
-
-
-__version__ = "0.3"
-

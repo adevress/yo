@@ -9,6 +9,9 @@
 ##
 
 import numpy
+import io
+
+import yo
 
 
 def save(filename, arr, *args, **kwargs):
@@ -27,7 +30,15 @@ def save(filename, arr, *args, **kwargs):
 
 def load(filename, *args, **kwargs):
     try:
-        return numpy.load(filename, *args, **kwargs)
+        if kwargs.get("mmap_mode", None) != None:
+            # if the user want memory mapping, give him memory mapping
+            return numpy.load(filename, *args, **kwargs)
+        
+        opts = yo.options()
+        raw_file = io.FileIO(filename)
+        buffer_io = io.BufferedReader(raw_file, buffer_size=opts.get_block_size())
+        return numpy.load(buffer_io, *args, **kwargs)
+        
     except ValueError as e:
         raise IOError("IOError: while reading %s because %s" % (filename, str(e)))
 

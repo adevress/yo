@@ -27,6 +27,7 @@
 
 #include <hadoken/format/format.hpp>
 #include <hadoken/executor/thread_pool_executor.hpp>
+#include <hadoken/os/env.hpp>
 
 
 
@@ -35,7 +36,7 @@
 namespace fmt = hadoken::format;
 
 
-constexpr std::size_t block_size = 1 << 24;  // 16Mi
+constexpr std::size_t block_size = 1 << 22;  // 16Mi
 
 
 namespace yo {
@@ -47,8 +48,35 @@ std::string version(){
 }
 
 
+std::size_t get_default_number_executors(){
+    try{
+        auto env_num_threads = hadoken::get_env("YO_NUM_THREADS");
+        if(env_num_threads){
+            return std::stoul(env_num_threads.get());
+        }
+    }catch(...){
+        // invalid conversion
+    }
+    return std::thread::hardware_concurrency()*2;
+}
+
+
+std::size_t get_default_block_size(){
+    try{
+        auto env_bs = hadoken::get_env("YO_BLOCK_SIZE");
+        if(env_bs){
+            return std::stoul(env_bs.get());
+        }
+    }catch(...){
+        // invalid conversion
+    }
+    return block_size;
+}
+
+
+
 options::options() :
-    _threads(std::thread::hardware_concurrency()*2),
+    _threads(get_default_number_executors()),
     _block_size(block_size)
 
 {
@@ -69,7 +97,7 @@ std::size_t options::get_block_size() const{
 
 
 struct context::internal{
-    internal() : executor(std::thread::hardware_concurrency()*2)
+    internal() : executor()
     {}
 
     hadoken::thread_pool_executor executor;
