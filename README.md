@@ -57,6 +57,7 @@ r = npio.load("/tmp/zero.npy")
 
 ```
 
+
 ## ALGORITHM
 
 YO uses simple multi-threaded parallel I/O using a multiple of the DFS block size
@@ -67,6 +68,17 @@ YO uses simple multi-threaded parallel I/O using a multiple of the DFS block siz
 - Boost > 1.41
 
 Embedded component : [hadoken](https://github.com/adevress/hadoken)
+
+
+## CONFIGURATION
+
+### ENVIRONMENT VARIABLES
+
+- YO_BLOCK_SIZE : size of the individual block to read in bytes
+
+- YO_NUM_THREADS : number of working I/O threads
+
+
 
 
 ## LICENSE
