@@ -77,7 +77,7 @@ std::size_t get_default_block_size(){
 
 options::options() :
     _threads(get_default_number_executors()),
-    _block_size(block_size)
+    _block_size(get_default_block_size())
 
 {
 
