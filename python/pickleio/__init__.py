@@ -8,8 +8,19 @@
 ##  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ##
 
-import pickle
+
+
+
+import sys
 import io
+
+#  pickle / cPickle for python 2
+if sys.version_info < (3,0):
+    import cPickle as pickle
+else:
+    import pickle
+
+
 
 import yo
 
