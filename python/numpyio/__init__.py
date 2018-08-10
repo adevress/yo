@@ -28,6 +28,20 @@ def save(filename, arr, *args, **kwargs):
         f.flush()
 
 
+def savez_compressed(filename, *args, **kwargs):
+    filename = str(filename)
+    if not filename.endswith(".npz"):
+        filename += ".npz"
+    with open(filename, 'wb') as f:
+        numpy.savez_compressed(f, *args, **kwargs)
+        # a trick here
+        # we enforce flush explicitely here
+        # Many PFS have a relaxed POSIX model
+        # and do not insure content consistency between clients excepted
+        # in case of explicit flush
+        f.flush()
+
+
 def load(filename, *args, **kwargs):
     try:
         if kwargs.get("mmap_mode", None) != None:
