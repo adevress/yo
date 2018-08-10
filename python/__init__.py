@@ -22,5 +22,5 @@ from . _yo import (copyfile, options)
 copy = copyfile
 
 
-__version__ = "1.0"
+__version__ = "1.1"
 
