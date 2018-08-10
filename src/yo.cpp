@@ -38,8 +38,17 @@ namespace fmt = hadoken::format;
 
 constexpr std::size_t block_size = 1 << 22;  // 16Mi
 
-
 namespace yo {
+
+template<typename Function>
+struct defer_exec{
+    inline defer_exec(Function f) : _f(f){}
+    inline defer_exec(const defer_exec &) = delete;
+    inline ~defer_exec(){
+        _f();
+    }
+    Function _f;
+};
 
 
 
@@ -191,6 +200,11 @@ int open_file_or_in_subdir(const std::string & dst, const std::string & filename
 void context::copy_file(const options & opts, const std::string & src, const std::string & dst){
     int fd_src = open_file(src, O_RDONLY);
     int fd_dst = open_file_or_in_subdir(dst, extract_filename(src), O_WRONLY | O_CREAT);
+
+    defer_exec<std::function<void (void)>> close_action([&](){
+       close(fd_src);
+       close(fd_dst);
+    });
 
     struct stat st = stat_file(fd_src);
     const std::size_t size_file = st.st_size;
