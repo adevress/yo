@@ -49,9 +49,9 @@ def load(filename, *args, **kwargs):
             return numpy.load(filename, *args, **kwargs)
         
         opts = yo.options()
-        raw_file = io.FileIO(filename)
-        buffer_io = io.BufferedReader(raw_file, buffer_size=opts.get_block_size())
-        return numpy.load(buffer_io, *args, **kwargs)
+        with io.FileIO(filename) as raw_file:
+            with io.BufferedReader(raw_file, buffer_size=opts.get_block_size()) as buffer_io:
+                return numpy.load(buffer_io, *args, **kwargs)
         
     except ValueError as e:
         raise IOError("IOError: while reading %s because %s" % (filename, str(e)))

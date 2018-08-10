@@ -33,23 +33,21 @@ def dump(obj, filename, *args, **kwargs):
     assert is_string(filename)
 
     opts = yo.options()
-    raw_file = io.FileIO(filename, "w")
-    buffer_io = io.BufferedWriter(raw_file, buffer_size=opts.get_block_size())
 
-    res = pickle.dump(obj, buffer_io, *args, **kwargs)
-
-    buffer_io.flush()
-    raw_file.flush()
+    with io.FileIO(filename, "w") as raw_file:
+        with io.BufferedWriter(raw_file, buffer_size=opts.get_block_size()) as buffer_io:
+            res = pickle.dump(obj, buffer_io, *args, **kwargs)
+            buffer_io.flush()
+            raw_file.flush()
     return res
 
 
 def load(filename, *args, **kwargs):
     try:
         opts = yo.options()
-        raw_file = io.FileIO(filename, "r")
-        buffer_io = io.BufferedReader(raw_file, buffer_size=opts.get_block_size())
-
-        return pickle.load(buffer_io, *args, **kwargs)
+        with io.FileIO(filename, "r") as raw_file:
+            with io.BufferedReader(raw_file, buffer_size=opts.get_block_size()) as buffer_io:
+                return pickle.load(buffer_io, *args, **kwargs)
 
     except ValueError as e:
         raise IOError("IOError: while reading %s because %s" % (filename, str(e)))
