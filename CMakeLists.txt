@@ -55,6 +55,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/deps/pybind11/include  )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/deps/hadoken/include  )
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIR} )
+link_directories(${PYTHON_LIBRARY_DIRS})
 
 #
 # libyo library
