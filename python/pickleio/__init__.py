@@ -17,8 +17,12 @@ import io
 #  pickle / cPickle for python 2
 if sys.version_info < (3,0):
     import cPickle as pickle
+    def is_string(x):
+        return type(x) in [str, unicode]
 else:
     import pickle
+    def is_string(x):
+        return type(x) == str
 
 
 
@@ -26,14 +30,14 @@ import yo
 
 
 def dump(obj, filename, *args, **kwargs):
-    assert type(filename) == str
-    
+    assert is_string(filename)
+
     opts = yo.options()
     raw_file = io.FileIO(filename, "w")
     buffer_io = io.BufferedWriter(raw_file, buffer_size=opts.get_block_size())
-    
+
     res = pickle.dump(obj, buffer_io, *args, **kwargs)
-    
+
     buffer_io.flush()
     raw_file.flush()
     return res
@@ -44,9 +48,8 @@ def load(filename, *args, **kwargs):
         opts = yo.options()
         raw_file = io.FileIO(filename, "r")
         buffer_io = io.BufferedReader(raw_file, buffer_size=opts.get_block_size())
-        
+
         return pickle.load(buffer_io, *args, **kwargs)
-        
+
     except ValueError as e:
         raise IOError("IOError: while reading %s because %s" % (filename, str(e)))
-
