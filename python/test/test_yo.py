@@ -39,9 +39,8 @@ def copy_and_check(test, src, dst):
 def digest_of_file(filename):
     import hashlib
     digest = hashlib.sha1()
-    with open(filename) as f:
-        for line in f:
-            digest.update(line)
+    with open(filename, "rb") as f:
+        digest.update(f.read())
     return digest.hexdigest()
             
     
