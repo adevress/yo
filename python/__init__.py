@@ -11,6 +11,7 @@
 
 from . _yo import (copyfile, options)
 import shutil
+import os
 '''
     import copyfile
 '''
