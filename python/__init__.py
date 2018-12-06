@@ -10,17 +10,34 @@
 
 
 from . _yo import (copyfile, options)
-
+import shutil
 '''
     import copyfile
 '''
-
-
 '''
-    define copy as copyfile
+    define a set of filesystem operations mimicking shutil, reusing the logic.
 '''
-copy = copyfile
+
+def copy(src, dst, *, follow_symlinks=False):
+    assert (not follow_symlinks), "Yo does not support following symlinks"
+    if os.path.isdir(dst):
+        dst = os.path.join(dst, os.path.basename(src))
+    copyfile(src, dst)
+    shutil.copymode(src, dst, follow_symlinks=False)
+
+def copy2(src, dst, *, follow_symlinks=False):
+   assert(not follow_symlinks), "Yo does not support following symlinks"
+   if os.path.isdir(dst):
+       dst = os.path.join(dst, os.path.basename(src))
+   copyfile(src, dst)
+   shutil.copystat(src, dst, follow_symlinks=False)
+
+def move(src, dst):
+    return shutil.move(src, dst, copy_function=copy2)
+
+def copytree(src, dst, ignore_dangling_symlinks=False):
+    return shutil.copytree(src, dst, symlinks=False, ignore=None, copy_function=copy2, ignore_dangling_symlinks=ignore_dangling_symlinks)
 
 
-__version__ = "1.3"
+__version__ = "1.4"
 
